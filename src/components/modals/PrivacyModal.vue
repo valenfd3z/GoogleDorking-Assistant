@@ -1,60 +1,103 @@
 <template>
-  <div class="modal" v-if="isOpen" @click.self="close">
-    <div class="modal-content">
-      <button class="close" @click="close">&times;</button>
-      <h2><i class="fas fa-shield-alt"></i> Política de Privacidad y Términos de Uso</h2>
-      <div class="modal-body">
-        <div class="privacy-section">
-          <h3>1. Descargo de Responsabilidad</h3>
-          <p>Esta herramienta está diseñada exclusivamente para fines educativos, de investigación en seguridad informática y pruebas de penetración autorizadas. El mal uso de esta herramienta puede violar leyes de privacidad y seguridad cibernética.</p>
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" v-if="isOpen" @click.self="close">
+    <div class="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 animate-fade-in">
+      <!-- Header -->
+      <div class="sticky top-0 z-10 flex items-center justify-between p-6 bg-white/95 dark:bg-slate-800/95 backdrop-blur border-b border-gray-100 dark:border-gray-700">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="fas fa-shield-alt text-blue-600 dark:text-blue-400"></i>
+          Política de Privacidad
+        </h2>
+        <button 
+          @click="close"
+          class="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 space-y-8">
+        <!-- Section 1 -->
+        <div class="space-y-3 pb-6 border-b border-gray-100 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">1</span>
+            Descargo de Responsabilidad
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed pl-8">
+            Esta herramienta está diseñada exclusivamente para fines educativos, de investigación en seguridad informática y pruebas de penetración autorizadas. El mal uso de esta herramienta puede violar leyes de privacidad y seguridad cibernética.
+          </p>
         </div>
         
-        <div class="privacy-section">
-          <h3>2. Uso Aceptable</h3>
-          <p>Al utilizar esta herramienta, aceptas:</p>
-          <ul>
-            <li>Utilizarla solo en sistemas sobre los que tengas autorización explícita</li>
-            <li>Cumplir con todas las leyes y regulaciones aplicables</li>
-            <li>No realizar actividades maliciosas o ilegales</li>
-            <li>Obtener el consentimiento adecuado antes de realizar pruebas</li>
-          </ul>
+        <!-- Section 2 -->
+        <div class="space-y-3 pb-6 border-b border-gray-100 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">2</span>
+            Uso Aceptable
+          </h3>
+          <div class="pl-8">
+            <p class="text-gray-600 dark:text-gray-300 mb-3">Al utilizar esta herramienta, aceptas:</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-check text-green-500 mt-1 text-sm"></i>
+                <span>Utilizarla solo en sistemas sobre los que tengas autorización explícita</span>
+              </li>
+              <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-check text-green-500 mt-1 text-sm"></i>
+                <span>Cumplir con todas las leyes y regulaciones aplicables</span>
+              </li>
+              <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-check text-green-500 mt-1 text-sm"></i>
+                <span>No realizar actividades maliciosas o ilegales</span>
+              </li>
+            </ul>
+          </div>
         </div>
         
-        <div class="privacy-section">
-          <h3>3. Privacidad y Datos</h3>
-          <p>Esta aplicación respeta tu privacidad:</p>
-          <ul>
-            <li>No recopilamos ni almacenamos tus búsquedas</li>
-            <li>No utilizamos cookies de seguimiento</li>
-            <li>No compartimos datos con terceros</li>
-            <li>Todas las búsquedas se realizan directamente desde tu navegador</li>
-          </ul>
+        <!-- Section 3 -->
+        <div class="space-y-3 pb-6 border-b border-gray-100 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">3</span>
+            Privacidad y Datos
+          </h3>
+          <div class="pl-8">
+            <p class="text-gray-600 dark:text-gray-300 mb-3">Esta aplicación respeta tu privacidad:</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-lock text-blue-500 mt-1 text-sm"></i>
+                <span>No recopilamos ni almacenamos tus búsquedas</span>
+              </li>
+              <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-lock text-blue-500 mt-1 text-sm"></i>
+                <span>No utilizamos cookies de seguimiento</span>
+              </li>
+              <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-lock text-blue-500 mt-1 text-sm"></i>
+                <span>Todas las búsquedas se realizan directamente desde tu navegador</span>
+              </li>
+            </ul>
+          </div>
         </div>
         
-        <div class="privacy-section">
-          <h3>4. Limitación de Responsabilidad</h3>
-          <p>Los desarrolladores de esta herramienta no se hacen responsables por:</p>
-          <ul>
-            <li>El mal uso de la herramienta</li>
-            <li>Daños causados por el uso inadecuado</li>
-            <li>Consecuencias legales derivadas de actividades no autorizadas</li>
-            <li>La exactitud de los resultados de búsqueda</li>
-          </ul>
+        <!-- Section 4 -->
+        <div class="space-y-3">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold">4</span>
+            Limitación de Responsabilidad
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed pl-8">
+            Los desarrolladores de esta herramienta no se hacen responsables por el mal uso de la misma, daños causados por el uso inadecuado, o consecuencias legales derivadas de actividades no autorizadas.
+          </p>
         </div>
-        
-        <div class="privacy-section">
-          <h3>5. Cumplimiento Legal</h3>
-          <p>Es tu responsabilidad asegurarte de que el uso de esta herramienta cumpla con todas las leyes y regulaciones aplicables en tu jurisdicción, incluyendo pero no limitado a:</p>
-          <ul>
-            <li>Leyes de privacidad de datos</li>
-            <li>Leyes de seguridad informática</li>
-            <li>Regulaciones de protección de la propiedad intelectual</li>
-          </ul>
-        </div>
-        
-        <div class="modal-actions">
-          <button class="btn btn-primary" @click="close">Entendido</button>
-        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="sticky bottom-0 p-6 bg-gray-50 dark:bg-slate-800/95 border-t border-gray-100 dark:border-gray-700 flex justify-end rounded-b-2xl">
+        <button 
+          @click="close"
+          class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/30"
+        >
+          Entendido
+        </button>
       </div>
     </div>
   </div>
@@ -92,146 +135,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-  overflow-y: auto;
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.modal-content {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border-radius: 8px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  border: 1px solid var(--border-color);
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 1.75rem;
-  font-weight: bold;
-  color: var(--text-secondary);
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s;
-}
-
-.close:hover {
-  color: var(--color-danger);
-  background-color: var(--bg-secondary);
-}
-
-.modal h2, h3 {
-  color: var(--color-primary);
-  margin-top: 0;
-}
-
-p, li {
-  color: var(--text-primary);
-}
-
-.privacy-section {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.privacy-section:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.modal p {
-  margin: 0 0 1.5rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.btn {
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  font-size: 0.9375rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid transparent;
-}
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-@media (max-width: 640px) {
-  .modal h2 {
-    font-size: 1.25rem;
-    padding: 1.25rem 1rem 1rem;
-  }
-  
-  .modal-body {
-    padding: 1rem;
-  }
-  
-  .modal h3 {
-    font-size: 1.125rem;
-  }
-  
-  .modal-actions {
-    justify-content: center;
-  }
-  
-  .btn {
-    width: 100%;
-    padding: 0.625rem 1rem;
-  }
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
 }
 </style>

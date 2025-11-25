@@ -1,64 +1,123 @@
 <template>
-  <header class="encabezado">
-    <div class="contenido-encabezado">
-      <div class="contenedor-logo">
-        <img src="/lupa-logo.svg" alt="Logo de Recon Expert" class="logo" style="width: 40px; height: 40px;">
-      </div>
-      <div class="texto-encabezado">
-        <h1 class="titulo-app">RECON-EXPERT</h1>
-        <h2 class="subtitulo">Asistente de Google Dorking</h2>
-        <p class="descripcion">Crea consultas avanzadas de búsqueda en Google con facilidad</p>
+  <header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-slate-900/80 border-b border-white/10 shadow-lg transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo and Title -->
+        <div class="flex items-center gap-4">
+          <div class="relative group">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full opacity-75 group-hover:opacity-100 blur transition duration-200"></div>
+            <div class="relative w-12 h-12 bg-white rounded-full flex items-center justify-center p-2 shadow-xl">
+              <img src="/lupa-logo.svg" alt="Logo de Recon Expert" class="w-full h-full object-contain">
+            </div>
+          </div>
+          
+          <div class="flex flex-col">
+            <h1 class="text-2xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 uppercase">
+              Recon-Expert
+            </h1>
+            <h2 class="text-sm font-medium text-gray-300">Asistente de Google Dorking</h2>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <button 
+            @click="mostrarAyuda = !mostrarAyuda"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+          >
+            <i class="fas fa-info-circle"></i>
+            <span class="hidden sm:inline">Ayuda</span>
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Tarjeta de ayuda -->
-    <TarjetaAnuncio :esta-abierto="mostrarAyuda" @cerrar="mostrarAyuda = false">
-      <h3><i class="fas fa-info-circle"></i> Cómo usar Recon-Expert</h3>
-      
-      <div class="seccion-ayuda">
-        <h4>1. Operadores de Búsqueda</h4>
-        <p>Utiliza los botones de operadores para añadir búsquedas avanzadas:</p>
-        <ul>
-          <li><strong>filetype:</strong> Busca tipos específicos de archivos (ej: pdf, doc, xls)</li>
-          <li><strong>site:</strong> Busca dentro de un sitio web específico</li>
-          <li><strong>inurl:</strong> Busca palabras en la URL</li>
-          <li><strong>intitle:</strong> Busca palabras en el título de la página</li>
-          <li><strong>ext:</strong> Busca por extensión de archivo</li>
-        </ul>
-      </div>
+    <Transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="transform -translate-y-2 opacity-0"
+      enter-to-class="transform translate-y-0 opacity-100"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="transform translate-y-0 opacity-100"
+      leave-to-class="transform -translate-y-2 opacity-0"
+    >
+      <div v-if="mostrarAyuda" class="absolute top-full right-0 left-0 bg-slate-800/95 backdrop-blur-xl border-b border-white/10 shadow-2xl p-6 sm:p-8">
+        <div class="max-w-4xl mx-auto relative">
+          <button 
+            @click="mostrarAyuda = false"
+            class="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
 
-      <div class="seccion-ayuda">
-        <h4>2. Ejemplos de Búsquedas</h4>
-        <div class="ejemplo">
-          <p>Buscar documentos PDF con contraseñas:</p>
-          <code>filetype:pdf contraseña OR password</code>
-        </div>
-        <div class="ejemplo">
-          <p>Buscar paneles de administración:</p>
-          <code>inurl:admin | inurl:login intitle:"admin"</code>
-        </div>
-        <div class="ejemplo">
-          <p>Buscar en un dominio específico:</p>
-          <code>site:ejemplo.com "palabra clave"</code>
-        </div>
-      </div>
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <i class="fas fa-graduation-cap text-blue-400"></i>
+            Cómo usar Recon-Expert
+          </h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Section 1 -->
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-blue-300 flex items-center gap-2">
+                <i class="fas fa-code"></i> Operadores
+              </h4>
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li><strong class="text-blue-400">filetype:</strong> Tipos de archivo (pdf, doc)</li>
+                <li><strong class="text-blue-400">site:</strong> Sitio específico</li>
+                <li><strong class="text-blue-400">inurl:</strong> Palabras en URL</li>
+                <li><strong class="text-blue-400">intitle:</strong> Palabras en título</li>
+                <li><strong class="text-blue-400">ext:</strong> Extensión de archivo</li>
+              </ul>
+            </div>
 
-      <div class="seccion-ayuda">
-        <h4>3. Consejos Rápidos</h4>
-        <ul>
-          <li>Usa comillas para búsquedas exactas: <code>"texto exacto"</code></li>
-          <li>Excluye términos con guión: <code>-palabra</code></li>
-          <li>Usa OR para buscar múltiples términos: <code>usuario OR admin</code></li>
-          <li>Usa comodines: <code>admin*</code> (encuentra admin, administrator, etc.)</li>
-        </ul>
+            <!-- Section 2 -->
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-purple-300 flex items-center gap-2">
+                <i class="fas fa-search"></i> Ejemplos
+              </h4>
+              <div class="space-y-3">
+                <div class="bg-slate-900/50 p-3 rounded border-l-2 border-blue-500">
+                  <p class="text-xs text-gray-400 mb-1">PDFs con contraseñas:</p>
+                  <code class="text-xs font-mono text-blue-300">filetype:pdf contraseña</code>
+                </div>
+                <div class="bg-slate-900/50 p-3 rounded border-l-2 border-purple-500">
+                  <p class="text-xs text-gray-400 mb-1">Paneles admin:</p>
+                  <code class="text-xs font-mono text-purple-300">inurl:admin intitle:login</code>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-green-300 flex items-center gap-2">
+                <i class="fas fa-lightbulb"></i> Tips
+              </h4>
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2">
+                  <i class="fas fa-check text-green-500 mt-1"></i>
+                  <span>Usa comillas para <code class="text-xs bg-slate-900 px-1 rounded">"exacto"</code></span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fas fa-check text-green-500 mt-1"></i>
+                  <span>Excluye con guión <code class="text-xs bg-slate-900 px-1 rounded">-palabra</code></span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fas fa-check text-green-500 mt-1"></i>
+                  <span>Usa <code class="text-xs bg-slate-900 px-1 rounded">OR</code> para múltiples</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    </TarjetaAnuncio>
+    </Transition>
   </header>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import TarjetaAnuncio from '@/components/ui/AnnouncementCard.vue';
+// TarjetaAnuncio removed as we integrated the help directly for better styling control
+// import TarjetaAnuncio from '@/components/ui/AnnouncementCard.vue';
 
 // Estado para controlar la visibilidad de la ayuda
 const mostrarAyuda = ref(false);
@@ -66,180 +125,3 @@ const mostrarAyuda = ref(false);
 // Definir los eventos que emite el componente
 defineEmits(['mostrar-privacidad']);
 </script>
-
-<style scoped>
-.encabezado {
-  background-color: #1a1a2e !important;
-  color: white !important;
-  padding: 1.5rem 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-  z-index: 10;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Forzar colores del texto en el encabezado */
-.encabezado .subtitulo,
-.encabezado .descripcion {
-  color: white !important;
-}
-
-/* Asegurar que el contenedor del logo mantenga su fondo blanco */
-.contenedor-logo {
-  background-color: white !important;
-}
-
-.contenido-encabezado {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 0 1rem;
-}
-
-.contenedor-logo {
-  width: 80px;
-  height: 80px;
-  background-color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.logo {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.texto-encabezado {
-  flex: 1;
-}
-
-.titulo-app {
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin: 0;
-  line-height: 1.2;
-  letter-spacing: 1px;
-  background: linear-gradient(90deg, #4f46e5, #9333ea);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-}
-
-.subtitulo {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 0.3rem 0 0.5rem;
-  color: #e0e0e0;
-}
-
-.descripcion {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #a5b4fc;
-  max-width: 600px;
-}
-
-/* Estilos para la tarjeta de ayuda */
-.seccion-ayuda {
-  margin-bottom: 1.5rem;
-}
-
-.seccion-ayuda h4 {
-  color: var(--texto-primario);
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.seccion-ayuda p {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-}
-
-.seccion-ayuda ul {
-  margin: 0.5rem 0 1rem 1.25rem;
-  padding-left: 1rem;
-}
-
-.seccion-ayuda li {
-  margin-bottom: 0.25rem;
-  line-height: 1.5;
-}
-
-.ejemplo {
-  background-color: var(--fondo-secundario);
-  border-left: 3px solid var(--color-primario);
-  padding: 0.75rem 1rem;
-  margin: 0.75rem 0;
-  border-radius: 0 4px 4px 0;
-}
-
-.ejemplo p {
-  margin: 0 0 0.5rem 0;
-  color: var(--texto-secundario);
-  font-size: 0.9rem;
-}
-
-code {
-  font-family: 'JetBrains Mono', monospace;
-  background-color: var(--fondo-primario);
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  font-size: 0.85em;
-  color: var(--color-primario);
-  word-break: break-word;
-}
-
-/* Estilos responsivos */
-@media (max-width: 768px) {
-  .contenido-encabezado {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-  
-  .contenedor-logo {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto;
-  }
-  
-  .app-title {
-    font-size: 1.5rem;
-  }
-  
-  .subtitle {
-    font-size: 1.125rem;
-  }
-  
-  .header-actions {
-    position: static;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-  
-  .header-button span {
-    display: none;
-  }
-  
-  .help-card-content {
-    padding: 1rem;
-  }
-  
-  .help-section {
-    margin-bottom: 1.25rem;
-  }
-}
-</style>

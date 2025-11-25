@@ -61,10 +61,7 @@ const addOperator = (operator: string) => {
       newText = before + 'inurl:' + after;
       newCursorPos = start + 6;
       break;
-    case 'filetype:':
-      newText = before + 'filetype:pdf ' + after;
-      newCursorPos = start + 12;
-      break;
+
     case '""':
       newText = before + '"' + selectedText + '"' + after;
       newCursorPos = start + (selectedText ? selectedText.length + 2 : 2);
@@ -126,296 +123,123 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="query-builder">
-    <h2><i class="fas fa-magic"></i> Constructor de Consultas</h2>
-    <p>Haz clic en los operadores para añadirlos a tu consulta o escribe directamente en el campo de búsqueda.</p>
-    
-    <div class="quick-search-buttons">
-      <h3>Operadores de Búsqueda:</h3>
-      <div class="button-group">
-        <button class="btn btn-operator" @click="addOperator('filetype:')">
-          <i class="fas fa-file"></i> filetype:
-        </button>
-        <button class="btn btn-operator" @click="addOperator('site:')">
-          <i class="fas fa-globe"></i> site:
-        </button>
-        <button class="btn btn-operator" @click="addOperator('inurl:')">
-          <i class="fas fa-link"></i> inurl:
-        </button>
-        <button class="btn btn-operator" @click="addOperator('intitle:')">
-          <i class="fas fa-heading"></i> intitle:
-        </button>
-        <button class="btn btn-operator" @click="addOperator('ext:')">
-          <i class="fas fa-file-code"></i> ext:
-        </button>
+  <div class="space-y-8">
+    <!-- Main Query Builder Card -->
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300">
+      <div class="p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <i class="fas fa-magic text-blue-600 dark:text-blue-400 text-xl"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Constructor de Consultas</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Construye tu dork de Google seleccionando operadores</p>
+          </div>
+        </div>
+        
+        <!-- Operators Section -->
+        <div class="mb-8">
+          <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Operadores de Búsqueda</h3>
+          <div class="flex flex-wrap gap-2">
+            <button 
+              v-for="op in [
+                { label: 'filetype:', icon: 'fa-file', color: 'blue' },
+                { label: 'site:', icon: 'fa-globe', color: 'indigo' },
+                { label: 'inurl:', icon: 'fa-link', color: 'purple' },
+                { label: 'intitle:', icon: 'fa-heading', color: 'pink' },
+                { label: 'ext:', icon: 'fa-file-code', color: 'cyan' }
+              ]"
+              :key="op.label"
+              @click="addOperator(op.label)"
+              class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-slate-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-500/30 rounded-lg transition-all duration-200"
+            >
+              <i :class="['fas', op.icon, `text-${op.color}-500 group-hover:text-${op.color}-600`]"></i>
+              <span class="font-mono text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-300">{{ op.label }}</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Input Area -->
+        <div class="relative group mb-6">
+          <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl opacity-0 group-focus-within:opacity-100 transition duration-300 blur"></div>
+          <div class="relative">
+            <textarea 
+              v-model="query"
+              class="query-input w-full bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 rounded-xl border-0 ring-1 ring-gray-200 dark:ring-gray-700 focus:ring-0 p-4 font-mono text-sm leading-relaxed shadow-inner min-h-[120px] resize-y transition-all"
+              placeholder="Ej: contraseña admin filetype:pdf site:ejemplo.com"
+              spellcheck="false"
+              @input="updateSearchPreview"
+            ></textarea>
+            
+            <!-- Quick Actions inside textarea -->
+            <div class="absolute bottom-3 right-3 flex gap-2">
+              <button 
+                v-if="query"
+                @click="clearQuery"
+                class="p-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 shadow-sm"
+                title="Limpiar"
+              >
+                <i class="fas fa-eraser text-base"></i>
+              </button>
+              <button 
+                v-if="query"
+                @click="copyToClipboard"
+                class="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 shadow-sm"
+                :title="copied ? '¡Copiado!' : 'Copiar'"
+              >
+                <i :class="['fas text-base', copied ? 'fa-check' : 'fa-copy']"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Actions -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button 
+            @click="search"
+            class="flex-1 btn-primary flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <i class="fas fa-search"></i>
+            <span>Buscar en Google</span>
+          </button>
+        </div>
       </div>
-    </div>
-    
-    <div class="query-input-container">
-      <textarea 
-        v-model="query"
-        class="query-input" 
-        placeholder="Ej: contraseña admin filetype:pdf site:ejemplo.com"
-        rows="3"
-        spellcheck="false"
-        @input="updateSearchPreview"
-      ></textarea>
-    </div>
 
-    <div class="query-actions">
-      <button class="btn btn-primary" @click="search">
-        <i class="fas fa-search"></i> Buscar en Google
-      </button>
-      <button class="btn btn-secondary" @click="clearQuery">
-        <i class="fas fa-eraser"></i> Limpiar
-      </button>
-      <button 
-        class="btn btn-secondary" 
-        :title="copied ? '¡Copiado!' : 'Copiar consulta'"
-        @click="copyToClipboard"
-      >
-        <i :class="['far', copied ? 'fa-check' : 'fa-copy']"></i>
-      </button>
-    </div>
-
-    <div class="query-preview">
-      <p>Vista previa de la búsqueda:</p>
-      <div class="preview-link">
-        <a :href="searchUrl" target="_blank" rel="noopener noreferrer">
+      <!-- Preview Section -->
+      <div class="bg-gray-50 dark:bg-slate-900/50 border-t border-gray-100 dark:border-gray-700 p-4 sm:px-8 py-4">
+        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <i class="fas fa-eye"></i>
+          <span class="uppercase tracking-wider font-semibold">Vista Previa</span>
+        </div>
+        <a 
+          :href="searchUrl" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="block font-mono text-sm text-blue-600 dark:text-blue-400 hover:underline truncate transition-colors"
+        >
           {{ searchUrl }}
         </a>
       </div>
     </div>
     
-    <!-- Add ExampleQueries component -->
+    <!-- ExampleQueries component -->
     <ExampleQueries @use-example="onUseExample" />
   </div>
 </template>
 
-
-
 <style scoped>
-.quick-search-buttons {
-  margin-bottom: 1.5rem;
+/* Custom scrollbar for textarea if needed */
+textarea::-webkit-scrollbar {
+  width: 8px;
 }
-
-.btn-operator {
-  background-color: var(--color-primary);
-  color: white;
-  border: 1px solid var(--color-primary);
-  transition: all 0.2s ease;
-  margin: 0.25rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+textarea::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-.btn-operator i {
-  font-size: 0.9em;
-}
-
-/* Light mode */
-:root {
-  --operator-text-light: #1a56db;
-  --operator-bg-light: #ebf5ff;
-  --operator-border-light: #d1e9ff;
-}
-
-/* Dark mode */
-.dark .btn-operator {
-  background-color: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-}
-
-/* Light mode overrides */
-:not(.dark) .btn-operator {
-  background-color: var(--operator-bg-light);
-  color: var(--operator-text-light);
-  border-color: var(--operator-border-light);
-}
-
-/* Hover and active states */
-.btn-operator:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-.btn-operator:active {
-  transform: translateY(0);
-}
-
-.quick-search-buttons h3 {
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.btn-search {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
+textarea::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
   border-radius: 4px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.2s, transform 0.1s;
 }
-
-.btn-search:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-.btn-search:active {
-  transform: translateY(0);
-}
-
-.btn-search i {
-  font-size: 0.9em;
-}
-
-.query-builder {
-  background-color: var(--bg-secondary);
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.query-builder h2 {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.query-builder p {
-  margin-top: 0;
-  margin-bottom: 1.25rem;
-  color: var(--text-secondary);
-  font-size: 0.9375rem;
-}
-
-.query-input-container {
-  margin-bottom: 1.25rem;
-}
-
-.query-input {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 0.375rem;
-  font-family: 'JetBrains Mono', monospace, monospace;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-  resize: vertical;
-  min-height: 6rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.query-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.query-actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  cursor: pointer;
-  transition: all 0.2s;
-  gap: 0.5rem;
-  border: 1px solid transparent;
-}
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-}
-
-.btn-secondary {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border-color: var(--border-color);
-}
-
-.btn-secondary:hover {
-  background-color: var(--bg-secondary);
-}
-
-.query-preview {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.375rem;
-  padding: 1rem;
-  font-size: 0.875rem;
-}
-
-.query-preview p {
-  margin: 0 0 0.5rem 0;
-  color: var(--text-secondary);
-  font-size: 0.8125rem;
-}
-
-.preview-link {
-  word-break: break-all;
-}
-
-.preview-link a {
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-.preview-link a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 640px) {
-  .query-actions {
-    flex-direction: column;
-  }
-  
-  .btn {
-    width: 100%;
-    padding: 0.625rem 1rem;
-  }
+textarea::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.8);
 }
 </style>

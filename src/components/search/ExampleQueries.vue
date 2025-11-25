@@ -1,18 +1,39 @@
 <template>
-  <section class="examples">
-    <h2><i class="fas fa-lightbulb"></i> Ejemplos de Búsqueda</h2>
-    <p>Haz clic en cualquiera de estos ejemplos para probarlos:</p>
+  <section class="mt-12">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+        <i class="fas fa-lightbulb text-yellow-600 dark:text-yellow-400 text-xl"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Ejemplos de Búsqueda</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Haz clic en una tarjeta para probar el dork</p>
+      </div>
+    </div>
     
-    <div class="example-cards">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div 
         v-for="(example, index) in examples" 
         :key="index"
-        class="example-card"
+        class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-500/30 cursor-pointer transition-all duration-300 hover:-translate-y-1"
         @click="useExample(example.query)"
       >
-        <h3>{{ example.title }}</h3>
-        <p>{{ example.description }}</p>
-        <div class="example-query">{{ example.query }}</div>
+        <div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <i class="fas fa-arrow-right text-blue-500 transform -translate-x-2 group-hover:translate-x-0 transition-transform"></i>
+        </div>
+
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          {{ example.title }}
+        </h3>
+        
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">
+          {{ example.description }}
+        </p>
+        
+        <div class="bg-gray-50 dark:bg-slate-900/50 rounded-lg p-3 border border-gray-100 dark:border-gray-700/50 group-hover:border-blue-100 dark:group-hover:border-blue-500/20 transition-colors">
+          <code class="text-xs font-mono text-blue-600 dark:text-blue-400 break-all">
+            {{ example.query }}
+          </code>
+        </div>
       </div>
     </div>
   </section>
@@ -65,116 +86,3 @@ const useExample = (query: string) => {
   });
 };
 </script>
-
-<style scoped>
-.examples {
-  margin-top: 2rem;
-}
-
-.examples h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.examples > p {
-  margin-top: 0;
-  margin-bottom: 1.25rem;
-  color: var(--text-secondary);
-  font-size: 0.9375rem;
-}
-
-.example-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  width: 100%;
-}
-
-.example-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  padding: 1.25rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-sizing: border-box;
-}
-
-.example-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: var(--color-primary);
-}
-
-.example-card h3 {
-  margin: 0 0 0.5rem 0;
-  color: var(--color-primary);
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.example-card p {
-  margin: 0 0 1rem 0;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  flex-grow: 1;
-}
-
-.example-query {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  background: var(--bg-primary);
-  padding: 0.75rem;
-  border-radius: 0.35rem;
-  margin-top: auto;
-  overflow-x: auto;
-  white-space: pre;
-  word-break: break-word;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-}
-
-@media (max-width: 768px) {
-  .example-cards {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-  
-  .examples {
-    padding: 0 1rem;
-  }
-  
-  .example-card h3 {
-    font-size: 1.1rem;
-  }
-  
-  .example-query {
-    font-size: 0.8rem;
-    padding: 0.6rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .example-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .example-card {
-    padding: 1rem;
-  }
-  
-  .examples h2 {
-    font-size: 1.4rem;
-  }
-}
-</style>

@@ -15,17 +15,26 @@ export const useTemaStore = defineStore('tema', {
       const temaGuardado = localStorage.getItem('tema') || 'claro';
       this.establecerTema(temaGuardado as Tema);
     },
-    
+
     /**
      * Establece el tema actual
      * @param tema - El tema a establecer ('claro' u 'oscuro')
      */
     establecerTema(tema: Tema) {
       this.tema = tema;
+
+      // Tailwind CSS dark mode logic
+      if (tema === 'oscuro') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Legacy/Other support
       document.documentElement.setAttribute('data-theme', tema);
       localStorage.setItem('tema', tema);
     },
-    
+
     /**
      * Alterna entre temas claro y oscuro
      */
@@ -34,13 +43,13 @@ export const useTemaStore = defineStore('tema', {
       this.establecerTema(nuevoTema);
     }
   },
-  
+
   getters: {
     /**
      * Devuelve el tema actual
      */
     obtenerTemaActual: (state) => state.tema,
-    
+
     /**
      * Devuelve si el tema actual es oscuro
      */
